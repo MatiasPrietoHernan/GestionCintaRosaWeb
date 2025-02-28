@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CapaDatos.Interfaces;
 using CapaDatos.Modelos;
+using CapaLogica.DTO;
 using CapaLogica.Interfaces;
 
 namespace CapaLogica.Servicios
@@ -36,7 +37,7 @@ namespace CapaLogica.Servicios
         }
         public async Task CrearUsuario(Usuarios usuario)
         {
-            if(usuario == null)
+            if (usuario == null)
             {
                 throw new ArgumentException("El usuario no puede ser nulo");
             }
@@ -79,6 +80,27 @@ namespace CapaLogica.Servicios
                 throw new ArgumentException("No se encontró el usuario");
             }
             await usuariosRepository.EliminarUsuarioAsync(id);
+        }
+        public async Task<Usuarios> ValidarUsuario(UsuarioLogin usuario)
+        {
+            if (usuario == null)
+            {
+                throw new ArgumentException("El usuario no puede ser nulo");
+            }
+            if (!usuario.Email.Contains("@") || !usuario.Email.Contains("."))
+            {
+                throw new ArgumentException("El email no es válido");
+            }
+            if (usuario.Password.Length < 8)
+            {
+                throw new ArgumentException("La contraseña debe tener al menos 8 caracteres");
+            }
+            var usuarioValidado = await usuariosRepository.ValidarUsuarioAsync(usuario.Email, usuario.Password);
+            if (usuarioValidado == null)
+            {
+                throw new ArgumentException("Usuario o contraseña incorrectos");
+            }
+            return usuarioValidado;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using CapaDatos.Modelos;
 using CapaLogica.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,6 +15,8 @@ namespace GestionCintaRosaWeb.Controllers
         {
             this.pagosServices = pagosServices;
         }
+
+        [Authorize(Roles = "Admin,Contador,Medico")]
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -30,6 +33,7 @@ namespace GestionCintaRosaWeb.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize(Roles = "Admin,Contador,Medico")]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
@@ -47,6 +51,7 @@ namespace GestionCintaRosaWeb.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize(Roles ="Contador,Medico")]
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Pagos pagos)
         {
@@ -60,6 +65,7 @@ namespace GestionCintaRosaWeb.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize(Roles = "Contador,Medico")]
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] Pagos pagos)
         {
@@ -73,6 +79,7 @@ namespace GestionCintaRosaWeb.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize(Roles = "Contador,Medico")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

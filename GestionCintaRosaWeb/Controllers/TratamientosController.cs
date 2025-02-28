@@ -1,5 +1,6 @@
 ﻿using CapaDatos.Modelos;
 using CapaLogica.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,6 +15,7 @@ namespace GestionCintaRosaWeb.Controllers
         {
             this.tratamientosServices = tratamientosServices;
         }
+        [Authorize(Roles = "Admin,Medico")]
         [HttpGet]
         public async Task<IActionResult> ObtenerTratamientos()
         {
@@ -27,6 +29,7 @@ namespace GestionCintaRosaWeb.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize(Roles = "Admin,Medico")]
         [HttpGet("{id}")]
         public async Task<IActionResult> ObtenerTratamiento(int id)
         {
@@ -40,6 +43,7 @@ namespace GestionCintaRosaWeb.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize(Roles = "Admin,Medico")]
         [HttpGet("relaciones")]
         public async Task<IActionResult> ObtenerRelacionesTratamientos()
         {
@@ -53,6 +57,7 @@ namespace GestionCintaRosaWeb.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize(Roles = "Medico")]
         [HttpPost]
         public async Task<IActionResult> CrearTratamiento([FromBody]Tratamientos tratamiento)
         {
@@ -66,6 +71,7 @@ namespace GestionCintaRosaWeb.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize(Roles = "Medico")]
         [HttpPut]
         public async Task<IActionResult> ActualizarTratamiento([FromBody]Tratamientos tratamiento)
         {
@@ -79,6 +85,7 @@ namespace GestionCintaRosaWeb.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize(Roles = "Medico")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> EliminarTratamiento(int id)
         {

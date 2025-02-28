@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CapaDatos.Modelos;
+using CapaLogica.DTO;
 
 namespace CapaLogica.Interfaces
 {
@@ -14,6 +15,8 @@ namespace CapaLogica.Interfaces
         Task CrearUsuario(Usuarios usuario);
         Task ActualizarUsuario(Usuarios usuario);
         Task EliminarUsuario(int id);
+        Task<Usuarios> ValidarUsuario(UsuarioLogin usuario);
+        
 
     }
 }

@@ -1,5 +1,6 @@
 ﻿using CapaDatos.Modelos;
 using CapaLogica.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,6 +15,7 @@ namespace GestionCintaRosaWeb.Controllers
         {
             this.diagnosticosServices = diagnosticosServices;
         }
+        [Authorize(Roles = "Admin,Medico")]
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -30,6 +32,7 @@ namespace GestionCintaRosaWeb.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize(Roles = "Admin,Medico")]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
@@ -47,6 +50,7 @@ namespace GestionCintaRosaWeb.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize(Roles = "Admin,Medico")]
         [HttpGet("relaciones")]
         public async Task<IActionResult> GetRelaciones()
         {
@@ -64,6 +68,7 @@ namespace GestionCintaRosaWeb.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize(Roles ="Medico")]
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Diagnosticos diagnostico)
         {
@@ -77,6 +82,7 @@ namespace GestionCintaRosaWeb.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize(Roles = "Medico")]
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] Diagnosticos diagnostico)
         {
@@ -90,6 +96,7 @@ namespace GestionCintaRosaWeb.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize(Roles = "Medico")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

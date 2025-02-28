@@ -40,6 +40,10 @@ namespace CapaDatos.Repositorios
             _context.Usuarios.Remove(usuario);
             await _context.SaveChangesAsync();
         }
+        public async Task<Usuarios> ValidarUsuarioAsync(string email, string password)
+        {
+            return await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == email && u.PasswordHash == password);
+        }
 
     }
 }

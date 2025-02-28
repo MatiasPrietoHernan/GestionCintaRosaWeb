@@ -14,5 +14,6 @@ namespace CapaDatos.Interfaces
         Task CrearUsuarioAsync(Usuarios usuarios);
         Task ActualizarUsuarioAsync(Usuarios usuarios);
         Task EliminarUsuarioAsync(int id);
+        Task<Usuarios> ValidarUsuarioAsync(string email, string password);
     }
 }
