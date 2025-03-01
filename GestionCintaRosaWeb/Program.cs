@@ -10,7 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Aqui configuramos el jason web token para que podamos dar un toque a la sesión.
+// Aqui configuramos el jason web token para que podamos dar un toque a la sesiï¿½n.
 
 var key = Encoding.ASCII.GetBytes(builder.Configuration["JWT:key"]);
 builder.Services.AddAuthentication(options =>
@@ -32,6 +32,22 @@ builder.Services.AddAuthentication(options =>
         ValidateLifetime = true
     };
 });
+
+var corsPolicy = "_myAllowSpecificOrigins";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: corsPolicy,
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:5173")
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials();
+        });
+});
+
+
+
 builder.Services.AddAuthorization();
 
 // Add services to the container.
@@ -72,6 +88,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("_myAllowSpecificOrigins");
 
 app.UseAuthentication();
 
