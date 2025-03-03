@@ -52,7 +52,18 @@ namespace GestionCintaRosaWeb.Controllers
                     Rol = usuario.Rol 
                 };
                 var token = await authServices.GenerarToken(tokenRequest);
-                return Ok(new { Token = token});
+
+                var cookie = new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.None,
+                    Expires = DateTime.Now.AddHours(1)
+                };
+
+                Response.Cookies.Append("auth_token", token, cookie);
+
+                return Ok(new { success = true, message = "Login exitoso!"});
             }
             catch (Exception ex)
             {

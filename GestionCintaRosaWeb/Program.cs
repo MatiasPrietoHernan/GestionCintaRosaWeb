@@ -2,15 +2,20 @@ using System.Text;
 using CapaDatos;
 using CapaDatos.Interfaces;
 using CapaDatos.Repositorios;
+using CapaLogica.DTO;
 using CapaLogica.Interfaces;
 using CapaLogica.Servicios;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Aqui configuramos el jason web token para que podamos dar un toque a la sesi�n.
+
+
+JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
 var key = Encoding.ASCII.GetBytes(builder.Configuration["JWT:key"]);
 builder.Services.AddAuthentication(options =>
@@ -31,6 +36,17 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = builder.Configuration["Jwt:Audience"],
         ValidateLifetime = true
     };
+     options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            if (context.Request.Cookies.ContainsKey("auth_token"))
+            {
+                context.Token = context.Request.Cookies["auth_token"];
+            }
+            return Task.CompletedTask;
+        }
+   };
 });
 
 var corsPolicy = "_myAllowSpecificOrigins";
@@ -59,6 +75,10 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JWT"));
+
+
 //Repositorios
 builder.Services.AddScoped<IPacienteRepository, PacientesRepository>();
 builder.Services.AddScoped<IConsultasRepository, ConsultasRepository>();
@@ -77,6 +97,7 @@ builder.Services.AddScoped<IMedicosServices, MedicoService>();
 builder.Services.AddScoped<IPagosServices, PagosServices>();
 builder.Services.AddScoped<IUsuariosServices, UsuarioServices>();
 builder.Services.AddScoped<IAuthServices, AuthServices>();
+builder.Services.AddScoped<IValidateToken, ValidateToken>();
 
 var app = builder.Build();
 
